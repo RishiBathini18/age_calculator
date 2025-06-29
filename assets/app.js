@@ -1,21 +1,30 @@
-const calculateAge = () => {
-    const birthDateInput = document.getElementById('birthDate').value;
-    const birthDate = new Date(birthDateInput);
-    const today = new Date();
+document.getElementById("age-form").addEventListener("submit", function (e) {
+  e.preventDefault();
 
-    if (!birthDateInput || isNaN(birthDate.getTime())) {
-        document.getElementById('result').innerText = 'Please enter a valid date.';
-        return;
-    }
+  const dob = document.getElementById("dob").value;
+  if (!dob) {
+    document.getElementById("result").innerText = "Please select a valid date.";
+    return;
+  }
 
-    let age = today.getFullYear() - birthDate.getFullYear();
-    const monthDifference = today.getMonth() - birthDate.getMonth();
+  const birthDate = new Date(dob);
+  const today = new Date();
 
-    if (monthDifference < 0 || (monthDifference === 0 && today.getDate() < birthDate.getDate())) {
-        age--;
-    }
+  let ageYears = today.getFullYear() - birthDate.getFullYear();
+  let ageMonths = today.getMonth() - birthDate.getMonth();
+  let ageDays = today.getDate() - birthDate.getDate();
 
-    document.getElementById('result').innerText = `Your age is ${age} years.`;
-};
+  if (ageDays < 0) {
+    ageMonths--;
+    ageDays += new Date(today.getFullYear(), today.getMonth(), 0).getDate();
+  }
 
-document.getElementById('calculateButton').addEventListener('click', calculateAge);
+  if (ageMonths < 0) {
+    ageYears--;
+    ageMonths += 12;
+  }
+
+  const resultText = `You are ${ageYears} years, ${ageMonths} months, and ${ageDays} days old.`;
+
+  document.getElementById("result").innerText = resultText;
+});
